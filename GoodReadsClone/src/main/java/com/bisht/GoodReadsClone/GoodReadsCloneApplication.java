@@ -21,12 +21,6 @@ public class GoodReadsCloneApplication {
 		SpringApplication.run(GoodReadsCloneApplication.class, args);
 	}
 
-	@RequestMapping("/user")
-	public String user(@AuthenticationPrincipal OAuth2User principal) {
-		System.out.println(principal);
-		return principal.getAttribute("name");
-	}
-
 	/**
 	 * This is necessary to have the Spring Boot app use the Astra secure bundle
 	 * to connect to the database

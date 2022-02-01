@@ -4,7 +4,7 @@ import java.util.List;
 
 public class SearchResult {
     private int numFound;
-    private List<SearchBook> searchBook;
+    private List<SearchBook> docs;
 
     public int getNumFound() {
         return numFound;
@@ -14,11 +14,11 @@ public class SearchResult {
         this.numFound = numFound;
     }
 
-    public List<SearchBook> getSearchBook() {
-        return searchBook;
+    public List<SearchBook> getDocs() {
+        return docs;
     }
 
-    public void setSearchBook(List<SearchBook> searchBook) {
-        this.searchBook = searchBook;
+    public void setDocs(List<SearchBook> docs) {
+        this.docs = docs;
     }
 }

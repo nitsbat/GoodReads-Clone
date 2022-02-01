@@ -4,8 +4,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class SearchController {
@@ -14,18 +18,31 @@ public class SearchController {
 
     private WebClient webClient;
 
+    private final String COVER_ID = "https://covers.openlibrary.org/b/id/";
+
     public SearchController(WebClient.Builder webclientBuilder) {
-        this.webClient = webclientBuilder.baseUrl(BASE_URL).build();
+        this.webClient = webclientBuilder.exchangeStrategies(ExchangeStrategies.builder()
+                .codecs(configure -> configure.defaultCodecs().maxInMemorySize(16 * 1024 * 1024)).build())
+                .baseUrl(BASE_URL).build();
     }
 
     @GetMapping("/search")
     public String searchBook(@RequestParam String query, Model model) {
-        final Mono<SearchResult> mono = this.webClient.get().uri("?q={query}", query)
+        Mono<SearchResult> mono = this.webClient.get().uri("?q={query}", query)
                 .retrieve().bodyToMono(SearchResult.class);
         SearchResult result = mono.block();
         if (result == null)
             return "search-no-book";
-        model.addAttribute("searchResult", result);
+        List<SearchBook> resultData = result.getDocs().stream()
+                .map(searchData -> {
+                    searchData.setKey(searchData.getKey().replace("/works/",""));
+                    searchData.setCover_i(new StringBuilder().append(COVER_ID)
+                            .append(searchData.getCover_i())
+                            .append("-L.jpg").toString());
+                    return searchData;
+                })
+                .limit(10).collect(Collectors.toList());
+        model.addAttribute("searchResults", resultData);
         return "search";
     }
 }

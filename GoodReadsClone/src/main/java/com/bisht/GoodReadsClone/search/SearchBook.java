@@ -7,9 +7,10 @@ public class SearchBook {
 
     private String key;
     private String title;
-    private LocalDate publish_date;
+    private int first_publish_year;
     private String cover_i;
     private List<String> author_name;
+
 
     public String getKey() {
         return key;
@@ -27,14 +28,6 @@ public class SearchBook {
         this.title = title;
     }
 
-    public LocalDate getPublish_date() {
-        return publish_date;
-    }
-
-    public void setPublish_date(LocalDate publish_date) {
-        this.publish_date = publish_date;
-    }
-
     public String getCover_i() {
         return cover_i;
     }
@@ -49,5 +42,13 @@ public class SearchBook {
 
     public void setAuthor_name(List<String> author_name) {
         this.author_name = author_name;
+    }
+
+    public int getFirst_publish_year() {
+        return first_publish_year;
+    }
+
+    public void setFirst_publish_year(int first_publish_year) {
+        this.first_publish_year = first_publish_year;
     }
 }
