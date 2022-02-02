@@ -1,5 +1,8 @@
 package com.bisht.GoodReadsClone.books;
 
+import com.bisht.GoodReadsClone.userbooks.UserBookEntity;
+import com.bisht.GoodReadsClone.userbooks.UserBookKey;
+import com.bisht.GoodReadsClone.userbooks.UserBookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -18,6 +21,9 @@ public class BookController {
     @Autowired
     private BookRepository bookRepository;
 
+    @Autowired
+    private UserBookRepository userBookRepository;
+
     @GetMapping(value = "/books/{bookId}")
     public String getBook(@PathVariable String bookId, Model model,
                           @AuthenticationPrincipal OAuth2User principal) {
@@ -25,15 +31,27 @@ public class BookController {
         if (optionalBook.isPresent()) {
             Book book = optionalBook.get();
             model.addAttribute("book", book);
-            String coverImage = "static/image/no_image.jpg";
+            String coverImage = "static/images/no_image.jpg";
             if (book.getCoverIds() != null && book.getCoverIds().size() > 0) {
                 coverImage = new StringBuilder().append(COVER_ID)
                         .append(book.getCoverIds().get(0))
                         .append("-L.jpg").toString();
                 model.addAttribute("coverImage", coverImage);
             }
-            if (principal != null && principal.getAttribute("login") != null) {
-                model.addAttribute("loginId", principal.getAttribute("login"));
+            if (principal != null) {
+                String loginId = principal.getAttribute("login");
+                if (loginId != null) {
+                    model.addAttribute("loginId", loginId);
+                    UserBookKey key = new UserBookKey();
+                    key.setUserID(loginId);
+                    key.setBookId(book.getId());
+                    Optional<UserBookEntity> userBook = userBookRepository.findById(key);
+                    if (userBook.isPresent()) {
+                        model.addAttribute("userBook", userBook.get());
+                    } else {
+                        model.addAttribute("userBook", new UserBookEntity());
+                    }
+                }
             }
             return "book-found";
         }

@@ -1,5 +1,6 @@
 package com.bisht.GoodReadsClone.search;
 
+import com.nimbusds.oauth2.sdk.util.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,10 +36,14 @@ public class SearchController {
             return "search-no-book";
         List<SearchBook> resultData = result.getDocs().stream()
                 .map(searchData -> {
-                    searchData.setKey(searchData.getKey().replace("/works/",""));
-                    searchData.setCover_i(new StringBuilder().append(COVER_ID)
-                            .append(searchData.getCover_i())
-                            .append("-L.jpg").toString());
+                    searchData.setKey(searchData.getKey().replace("/works/", ""));
+                    if (StringUtils.isNotBlank(searchData.getCover_i())) {
+                        searchData.setCover_i(new StringBuilder().append(COVER_ID)
+                                .append(searchData.getCover_i())
+                                .append("-L.jpg").toString());
+                    } else {
+                        searchData.setCover_i("/images/no_image.jpg");
+                    }
                     return searchData;
                 })
                 .limit(10).collect(Collectors.toList());
