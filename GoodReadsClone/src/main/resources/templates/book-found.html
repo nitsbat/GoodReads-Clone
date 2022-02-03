@@ -66,10 +66,10 @@
                                 <label for="status" class="form-label">Status</label>
                                 <select id="status" name="status" class="form-select" aria-label="Reading status"
                                         th:field="${userBook.status}">
-                                    <option selected value="0">Status</option>
-                                    <option value="reading">Currently Reading</option>
-                                    <option value="finished">Finished</option>
-                                    <option value="dnf">Did not Finish</option>
+                                    <option selected value="3">Status</option>
+                                    <option value="0-reading">Currently Reading</option>
+                                    <option value="1-finished">Finished</option>
+                                    <option value="2-dnf">Did not Finish</option>
                                 </select>
                             </div>
                             <div class="mb-3">
