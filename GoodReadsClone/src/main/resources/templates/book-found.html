@@ -44,6 +44,13 @@
                             updated
                             3 mins ago</small></p>
                     </div>
+                    <div  th:unless="${loginId}" class="card-body">
+                        <p class="card-text text-center display-7">Wanna track this book.??</p>
+                        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                            <a type="button" href="/oauth2/authorization/github" class="btn btn-primary btn-lg px-3 gap-3">Login via Github</a>
+                        </div>
+                    </div>
+
                     <div class="card-body">
                         <form th:if="${loginId}" th:attr="action=@{/addUserBook}" method="POST">
                             <input type="hidden"
