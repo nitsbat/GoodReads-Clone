@@ -4,6 +4,9 @@ Clone repository of GoodReads. This project doesn't include the population of ca
 This project is said too highly scalable and available and very good in performance. 
 The site is meant to be very fast despite the fact that we will be using large amounts of book data.
 
+### Note 
+This is the main repository for building the website. The Data initialisation repository can be found here: https://github.com/nitsbat/bookreads
+
 The data dump for both is taken from the open library website i.e - https://openlibrary.org/developers/dumps
 
 As we will be populating our database with these records, there will be millions of book flowing through the database. Will do it parallely but then also it will take
